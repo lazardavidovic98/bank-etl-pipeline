@@ -1,4 +1,4 @@
-# Bank Database Project v1.1
+# Bank Database Project 
 
 ## Overview
 Automated ETL pipeline with normalization and analysis for bank transaction data using Python, Pandas and Microsoft SQL Server.
