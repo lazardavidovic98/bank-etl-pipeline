@@ -149,52 +149,60 @@ sequenceDiagram
 
 ## Project structure
 
-```text
-bank-database-pipeline/
-├── src/bank_pipeline/
-│   ├── config.py              # settings from .env / environment variables
-│   ├── errors.py              # custom exceptions
-│   ├── pipeline.py            # runs all steps, error handling, run log
-│   ├── extract/
-│   │   ├── __init__.py        # get_dataset(): api / file / auto (fallback)
-│   │   └── api_client.py      # HTTP download: token, timeout, retry, size limit
-│   ├── transform/
-│   │   ├── parser.py          # API envelope / CSV → row-per-line CSV
-│   │   └── cleaner.py         # chunked validation and cleaning
-│   ├── load/
-│   │   ├── staging.py         # batch inserts (valid + rejected rows)
-│   │   ├── core.py            # runs load_core.sql and refresh_datamart.sql
-│   │   └── run_log.py         # etl.pipeline_run
-│   ├── database/
-│   │   ├── engine.py          # SQLAlchemy engine (pool, fast_executemany)
-│   │   ├── setup.py           # create database + tables
-│   │   └── sql_files.py       # run .sql files (GO batches, step row counts)
-│   └── utils/
-│       ├── logger.py          # rotating logs, secret masking
-│       ├── lock.py            # prevents parallel runs
-│       └── helpers.py         # batched(), cleanup of old files
-├── sql/
-│   ├── schema/                # 01-06: schemas, tables, views (safe to re-run)
-│   ├── transformations/       # load_core.sql   (staging → 3NF)
-│   ├── datamart/              # refresh_datamart.sql (3NF → star schema)
-│   └── analysis/              # city_distribution.sql (example report queries)
-├── scripts/
-│   ├── run_pipeline.py        # main entry point
-│   └── setup_database.py      # only create the database and tables
-├── scheduler/
-│   ├── windows/               # Task Scheduler: register/unregister + wrapper
-│   └── linux/                 # systemd service + timer, cron example, wrapper
-├── tests/                     # pytest: parser, cleaner, extract, utils, database
-├── data/
-│   ├── sample/transactions_snapshot.json   # last real API response (fallback)
-│   └── raw/ processed/ rejected/           # generated per run (git-ignored)
-├── docs/database-schema.md    # normalization and Data Mart in detail
-├── documentation.md           # phase-by-phase description of the pipeline
-├── logs/                      # pipeline.log, errors.log, scheduler.log (git-ignored)
-├── .env.example
-├── requirements.txt / requirements-dev.txt
-└── pytest.ini
-```
+
+<!-- project-tree:start -->
+<p>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline" title="bank-etl-pipeline"><img src=".github/readme-tree/00.svg" alt="bank-etl-pipeline" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/src/bank_pipeline" title="src/bank_pipeline/"><img src=".github/readme-tree/01.svg" alt="src/bank_pipeline/ — the pipeline package" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/config.py" title="src/bank_pipeline/config.py"><img src=".github/readme-tree/02.svg" alt="src/bank_pipeline/config.py — settings from .env / environment variables" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/errors.py" title="src/bank_pipeline/errors.py"><img src=".github/readme-tree/03.svg" alt="src/bank_pipeline/errors.py — custom exceptions" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/pipeline.py" title="src/bank_pipeline/pipeline.py"><img src=".github/readme-tree/04.svg" alt="src/bank_pipeline/pipeline.py — runs all steps, error handling, run log" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/src/bank_pipeline/extract" title="src/bank_pipeline/extract/"><img src=".github/readme-tree/05.svg" alt="src/bank_pipeline/extract/" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/extract/__init__.py" title="src/bank_pipeline/extract/__init__.py"><img src=".github/readme-tree/06.svg" alt="src/bank_pipeline/extract/__init__.py — get_dataset(): api / file / auto (fallback)" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/extract/api_client.py" title="src/bank_pipeline/extract/api_client.py"><img src=".github/readme-tree/07.svg" alt="src/bank_pipeline/extract/api_client.py — HTTP download: token, timeout, retry, size limit" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/src/bank_pipeline/transform" title="src/bank_pipeline/transform/"><img src=".github/readme-tree/08.svg" alt="src/bank_pipeline/transform/" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/transform/parser.py" title="src/bank_pipeline/transform/parser.py"><img src=".github/readme-tree/09.svg" alt="src/bank_pipeline/transform/parser.py — API envelope / CSV → row-per-line CSV" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/transform/cleaner.py" title="src/bank_pipeline/transform/cleaner.py"><img src=".github/readme-tree/10.svg" alt="src/bank_pipeline/transform/cleaner.py — chunked validation and cleaning" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/src/bank_pipeline/load" title="src/bank_pipeline/load/"><img src=".github/readme-tree/11.svg" alt="src/bank_pipeline/load/" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/load/staging.py" title="src/bank_pipeline/load/staging.py"><img src=".github/readme-tree/12.svg" alt="src/bank_pipeline/load/staging.py — batch inserts (valid + rejected rows)" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/load/core.py" title="src/bank_pipeline/load/core.py"><img src=".github/readme-tree/13.svg" alt="src/bank_pipeline/load/core.py — runs load_core.sql and refresh_datamart.sql" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/load/run_log.py" title="src/bank_pipeline/load/run_log.py"><img src=".github/readme-tree/14.svg" alt="src/bank_pipeline/load/run_log.py — etl.pipeline_run" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/src/bank_pipeline/database" title="src/bank_pipeline/database/"><img src=".github/readme-tree/15.svg" alt="src/bank_pipeline/database/" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/database/engine.py" title="src/bank_pipeline/database/engine.py"><img src=".github/readme-tree/16.svg" alt="src/bank_pipeline/database/engine.py — SQLAlchemy engine (pool, fast_executemany)" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/database/setup.py" title="src/bank_pipeline/database/setup.py"><img src=".github/readme-tree/17.svg" alt="src/bank_pipeline/database/setup.py — create database + tables" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/database/sql_files.py" title="src/bank_pipeline/database/sql_files.py"><img src=".github/readme-tree/18.svg" alt="src/bank_pipeline/database/sql_files.py — run .sql files (GO batches, step row counts)" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/src/bank_pipeline/utils" title="src/bank_pipeline/utils/"><img src=".github/readme-tree/19.svg" alt="src/bank_pipeline/utils/" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/utils/logger.py" title="src/bank_pipeline/utils/logger.py"><img src=".github/readme-tree/20.svg" alt="src/bank_pipeline/utils/logger.py — rotating logs, secret masking" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/utils/lock.py" title="src/bank_pipeline/utils/lock.py"><img src=".github/readme-tree/21.svg" alt="src/bank_pipeline/utils/lock.py — prevents parallel runs" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/src/bank_pipeline/utils/helpers.py" title="src/bank_pipeline/utils/helpers.py"><img src=".github/readme-tree/22.svg" alt="src/bank_pipeline/utils/helpers.py — batched(), cleanup of old files" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/sql" title="sql/"><img src=".github/readme-tree/23.svg" alt="sql/" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/sql/schema" title="sql/schema/"><img src=".github/readme-tree/24.svg" alt="sql/schema/ — 01-06: schemas, tables, views (safe to re-run)" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/sql/transformations/load_core.sql" title="sql/transformations/load_core.sql"><img src=".github/readme-tree/25.svg" alt="sql/transformations/load_core.sql — staging → 3NF" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/sql/datamart/refresh_datamart.sql" title="sql/datamart/refresh_datamart.sql"><img src=".github/readme-tree/26.svg" alt="sql/datamart/refresh_datamart.sql — 3NF → star schema" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/sql/analysis/city_distribution.sql" title="sql/analysis/city_distribution.sql"><img src=".github/readme-tree/27.svg" alt="sql/analysis/city_distribution.sql — example report queries" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/scripts" title="scripts/"><img src=".github/readme-tree/28.svg" alt="scripts/" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/scripts/run_pipeline.py" title="scripts/run_pipeline.py"><img src=".github/readme-tree/29.svg" alt="scripts/run_pipeline.py — main entry point" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/scripts/setup_database.py" title="scripts/setup_database.py"><img src=".github/readme-tree/30.svg" alt="scripts/setup_database.py — only create the database and tables" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/scheduler" title="scheduler/"><img src=".github/readme-tree/31.svg" alt="scheduler/" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/scheduler/windows" title="scheduler/windows/"><img src=".github/readme-tree/32.svg" alt="scheduler/windows/ — Task Scheduler: register/unregister + wrapper" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/scheduler/linux" title="scheduler/linux/"><img src=".github/readme-tree/33.svg" alt="scheduler/linux/ — systemd service + timer, cron example, wrapper" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/tests" title="tests/"><img src=".github/readme-tree/34.svg" alt="tests/ — pytest: parser, cleaner, extract, utils, database" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/data" title="data/"><img src=".github/readme-tree/35.svg" alt="data/" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/data/sample/transactions_snapshot.json" title="data/sample/transactions_snapshot.json"><img src=".github/readme-tree/36.svg" alt="data/sample/transactions_snapshot.json — last real API response (fallback)" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/data/raw" title="data/raw/"><img src=".github/readme-tree/37.svg" alt="data/raw/ — raw file of each run (git-ignored)" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/data/processed" title="data/processed/"><img src=".github/readme-tree/38.svg" alt="data/processed/ — parsed CSV of each run (git-ignored)" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/data/rejected" title="data/rejected/"><img src=".github/readme-tree/39.svg" alt="data/rejected/ — rows that failed validation (git-ignored)" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/docs/database-schema.md" title="docs/database-schema.md"><img src=".github/readme-tree/40.svg" alt="docs/database-schema.md — normalization and Data Mart in detail" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/documentation.md" title="documentation.md"><img src=".github/readme-tree/41.svg" alt="documentation.md — phase-by-phase description of the pipeline" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/tree/main/logs" title="logs/"><img src=".github/readme-tree/42.svg" alt="logs/ — pipeline, error and scheduler logs (git-ignored)" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/.env.example" title=".env.example"><img src=".github/readme-tree/43.svg" alt=".env.example — template for your own .env" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/requirements.txt" title="requirements.txt"><img src=".github/readme-tree/44.svg" alt="requirements.txt — runtime dependencies" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/requirements-dev.txt" title="requirements-dev.txt"><img src=".github/readme-tree/45.svg" alt="requirements-dev.txt — + pytest" align="top"></a><br>
+<a href="https://github.com/LazarDavidovic98/bank-etl-pipeline/blob/main/pytest.ini" title="pytest.ini"><img src=".github/readme-tree/46.svg" alt="pytest.ini" align="top"></a><br>
+</p>
+
+<sub>Every row is a link to that file or folder on GitHub. Purple: folders, green: source code, grey: configuration, data and docs.</sub>
+<!-- project-tree:end -->
 
 ## Technologies
 
