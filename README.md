@@ -1,9 +1,9 @@
 # bank-database-pipeline
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
-![SQL Server](https://img.shields.io/badge/SQL%20Server-2019%20%7C%202022-CC2927?logo=microsoftsqlserver&logoColor=white)
-![pandas](https://img.shields.io/badge/pandas-chunked-150458?logo=pandas&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.10%2B-54008B?logo=python&logoColor=white&labelColor=006633)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-2019%20%7C%202022-54008B?logo=microsoftsqlserver&logoColor=white&labelColor=006633)
+![pandas](https://img.shields.io/badge/pandas-chunked-54008B?logo=pandas&logoColor=white&labelColor=006633)
+![Tests](https://img.shields.io/badge/tests-pytest-54008B?logo=pytest&logoColor=white&labelColor=006633)
 
 An automated **ETL pipeline** that downloads bank card transactions from an authenticated HTTP API, validates and cleans them in chunks, stores them in a **normalized (3NF) Microsoft SQL Server** database and builds a **Data Mart** (star schema) for analyzing how transactions are distributed by **City**. The whole process runs with one command and is scheduled to repeat **every 24 hours** on Windows or Linux.
 
