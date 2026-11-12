@@ -1,4 +1,4 @@
-# bank-database-pipeline
+# bank-etl-pipeline
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-54008B?logo=python&logoColor=white&labelColor=006633)
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-2019%20%7C%202022-54008B?logo=microsoftsqlserver&logoColor=white&labelColor=006633)
