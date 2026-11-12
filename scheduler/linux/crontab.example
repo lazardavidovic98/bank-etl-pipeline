@@ -1,0 +1,5 @@
+# Alternative to the systemd timer: cron.
+# Add with `crontab -e` (replace the path with your project folder).
+#
+# min hour day month weekday  command
+  0   2    *   *     *        /opt/bank-database-pipeline/scheduler/linux/run_pipeline.sh

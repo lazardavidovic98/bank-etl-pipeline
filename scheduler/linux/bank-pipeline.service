@@ -1,0 +1,15 @@
+# systemd service that runs the pipeline once. Started by bank-pipeline.timer.
+# Replace /opt/bank-database-pipeline and the user with your own values.
+[Unit]
+Description=bank-database-pipeline ETL run
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=bankpipeline
+WorkingDirectory=/opt/bank-database-pipeline
+ExecStart=/opt/bank-database-pipeline/scheduler/linux/run_pipeline.sh
+# exit code 3 = previous run still active -> not an error
+SuccessExitStatus=3
+TimeoutStartSec=2h

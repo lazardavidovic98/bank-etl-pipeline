@@ -1,0 +1,11 @@
+# Runs bank-pipeline.service every day at 02:00.
+[Unit]
+Description=Run bank-database-pipeline every 24 hours
+
+[Timer]
+OnCalendar=*-*-* 02:00:00
+# if the machine was off at 02:00, run as soon as it boots
+Persistent=true
+
+[Install]
+WantedBy=timers.target
